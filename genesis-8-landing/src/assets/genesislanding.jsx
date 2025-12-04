@@ -71,10 +71,7 @@ const MatrixRain = () => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
-        
         const ctx = canvas.getContext('2d');
-        if (!ctx) return;
         
         const resize = () => {
             canvas.width = window.innerWidth;
@@ -198,34 +195,6 @@ const ExplosiveEntry = ({ children, delay = 0 }) => {
                 className="absolute inset-0 bg-cyan-400/10 rounded-xl pointer-events-none z-20"
             />
         </motion.div>
-    )
-}
-
-const HoloPhoenix = ({ size = 300 }) => {
-    // Using a simpler SVG based placeholder to avoid 3D context crashes in preview
-    // In a real environment with @react-three/fiber properly set up, you could swap this
-    // back to the 3D Canvas implementation.
-    return (
-        <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-            <motion.div
-                className="w-full h-full relative"
-                animate={{ rotateY: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
-            >
-                 <div className="absolute inset-0 flex items-center justify-center">
-                   <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_25px_cyan]">
-                        {/* Stylized Phoenix/Wing Shape */}
-                        <path d="M50 20 C 30 35, 10 45, 5 60 C 15 55, 30 50, 50 65 C 70 50, 85 55, 95 60 C 90 45, 70 35, 50 20 Z M 50 65 C 45 80, 40 90, 50 100 C 60 90, 55 80, 50 65 Z" 
-                              fill="none" stroke="cyan" strokeWidth="2" />
-                        <path d="M20 45 Q 35 55 50 40 Q 65 55 80 45" fill="none" stroke="purple" strokeWidth="1" opacity="0.8" />
-                        <circle cx="50" cy="50" r="2" fill="white" className="animate-pulse" />
-                   </svg>
-                </div>
-            </motion.div>
-             {/* Static Glow behind */}
-            <div className="absolute inset-0 bg-cyan-500/20 blur-3xl rounded-full animate-pulse" />
-        </div>
     )
 }
 
@@ -388,28 +357,6 @@ const EventCard = ({ title, icon: Icon, desc, color }) => {
     )
 }
 
-const TimelineItem = ({ side, title, content, icon: Icon, delay }) => {
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: side === "left" ? -100 : 100, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay }}
-            className={`flex w-full ${side === "left" ? "md:justify-start" : "md:justify-end"} mb-32 relative md:ml-0 ml-12`}
-        >
-            <div className="absolute -left-[37px] md:left-auto md:hidden top-0 w-4 h-4 bg-black border border-cyan-500 rounded-full z-10 shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
-            <div className={`md:w-1/2 w-full ${side === "left" ? 'md:pr-8 md:text-right md:mr-auto' : 'md:pl-8 md:text-left md:ml-auto'} relative`}>
-                <div className={`hidden md:block absolute top-0 w-4 h-4 bg-black border border-cyan-500 rounded-full z-10 shadow-[0_0_10px_rgba(6,182,212,0.5)] ${side === "left" ? "-right-[9px]" : "-left-[9px]"}`} />
-                <div className="bg-gray-900/50 backdrop-blur border border-gray-800 p-8 rounded-2xl hover:border-cyan-500 transition-colors duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] group">
-                    <Icon className={`w-8 h-8 text-cyan-400 mb-4 group-hover:scale-110 transition-transform duration-300 ${side === "left" ? "md:ml-auto" : ""}`} />
-                    <h3 className="text-2xl font-bold text-white mb-3 tracking-wider">{title}</h3>
-                    <p className="text-gray-400 leading-relaxed">{content}</p>
-                </div>
-            </div>
-        </motion.div>
-    )
-}
-
 // =================================================================
 // MAIN SECTIONS
 // =================================================================
@@ -421,20 +368,24 @@ const Hero = () => {
 
     return (
         <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-black">
+            {/* Matrix Rain Added Here */}
             <MatrixRain />
+            
+            {/* Background Grid */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 pointer-events-none" />
             
-            {/* Holographic Phoenix Component (Replaces unstable 3D loader for preview) */}
+            {/* 3D Matrix Cube */}
             <div className="absolute z-0 mt-[-50px]">
-                <HoloPhoenix size={400} />
+                <MatrixCube color="green" size={280} />
             </div>
             
-            <motion.div style={{ y: y1, opacity }} className="z-10 flex flex-col items-center text-center px-4 mt-8 pointer-events-none">
+            {/* Content */}
+            <motion.div style={{ y: y1, opacity }} className="z-10 flex flex-col items-center text-center px-4 mt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="mb-4 flex items-center space-x-2 pointer-events-auto"
+                    className="mb-4 flex items-center space-x-2"
                 >
                     <span className="px-2 py-1 border border-green-500/30 rounded text-xs font-mono text-green-400 bg-green-900/10 backdrop-blur-sm">SYSTEM READY</span>
                     <span className="px-2 py-1 border border-cyan-500/30 rounded text-xs font-mono text-cyan-400 bg-cyan-900/10 backdrop-blur-sm">V 8.0</span>
@@ -450,24 +401,50 @@ const Hero = () => {
     );
 };
 
-const ScrollyTellingSection = () => {
-    const containerRef = useRef(null)
-    const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] })
-    const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
-
+const AboutSection = () => {
     return (
-        <section ref={containerRef} className="relative min-h-[200vh] bg-black py-20">
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gray-800 transform md:-translate-x-1/2">
-                <motion.div style={{ height: lineHeight }} className="w-full bg-gradient-to-b from-cyan-500 via-purple-500 to-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.8)]" />
-            </div>
-            <div className="max-w-6xl mx-auto relative px-4 md:px-0">
-                <TimelineItem side="left" icon={Terminal} title="THE ORIGIN" content="'Genesis' signifies the birth of an idea. Organized by the BCA department, it blends cultural, technical, and gaming realms." delay={0} />
-                <TimelineItem side="right" icon={Cpu} title="THE NEXUS" content="A digital playground where intellect meets artistry. We foster creativity, competition, and community spirit through code and culture." delay={0.2} />
-                <TimelineItem side="left" icon={Zap} title="THE ENERGY" content="From hackathons to dance battles, Genesis embodies youthful vigor and scholarly excellence. Join the revolution." delay={0.4} />
-            </div>
+        <section className="relative min-h-screen bg-black flex items-center justify-center py-24 px-4">
+             {/* Background elements */}
+             <div className="absolute top-1/4 left-0 w-64 h-64 bg-green-500/10 rounded-full blur-[100px] pointer-events-none" />
+             <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+             
+             <div className="max-w-4xl mx-auto text-center relative z-10">
+                <motion.h2 
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-5xl md:text-7xl font-bold text-white mb-12 tracking-tighter"
+                >
+                    ABOUT GENESIS <span className="text-green-500">8.0</span>
+                </motion.h2>
+                
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="text-lg md:text-2xl text-gray-300 leading-relaxed space-y-8"
+                >
+                    <p>
+                        Genesis is not just an event; it is the dawn of a new digital era. 
+                        Organized by the visionary minds of the BCA department, it represents 
+                        the convergence of culture, technology, and gaming.
+                    </p>
+                    <p>
+                        This year, we transcend boundaries with <span className="text-green-400 font-mono">GENESIS 8.0</span>. 
+                        A nexus where code meets creativity, where strategy meets skill, and where 
+                        the next generation of tech leaders rises.
+                    </p>
+                    <p>
+                        Prepare to immerse yourself in a world of innovation, competition, and 
+                        unparalleled energy. The system is online. Are you ready?
+                    </p>
+                </motion.div>
+             </div>
         </section>
-    );
-};
+    )
+}
 
 const EventsGrid = () => {
     return (
@@ -552,7 +529,8 @@ export default function GenesisLanding() {
             <Navbar />
             <main>
                 <Hero />
-                <ScrollyTellingSection />
+                {/* Replaced ScrollyTellingSection with AboutSection */}
+                <AboutSection />
                 <EventsGrid />
                 <Coordinators />
             </main>
