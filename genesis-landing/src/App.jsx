@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import MatrixModel from './ThreeModel/RotatingModel';
 
 // =================================================================
 // 0. DATA: EVENT DETAILS DATABASE
@@ -153,34 +154,46 @@ const ExplosiveEntry = ({ children, delay = 0 }) => (
 
 // --- STABLE CSS MATRIX CUBE (No 3D/WebGL Required) ---
 const MatrixCube = ({ color = "green", size = 280 }) => {
-    const half = size / 2
-    const themes = {
-        green: { border: "border-green-500/80", shadow: "shadow-[0_0_30px_rgba(34,197,94,0.2)]", blob: "bg-green-500/20" },
-        purple: { border: "border-purple-500/80", shadow: "shadow-[0_0_30px_rgba(168,85,247,0.2)]", blob: "bg-purple-500/20" },
-    }
-    const active = themes[color] || themes.green
-    
-    // CSS-only Face component
-    const Face = ({ transform }) => (
-        <div className={`absolute inset-0 border-2 ${active.border} bg-black/90 flex flex-col items-center justify-center overflow-hidden ${active.shadow}`} style={{ transform }}>
-            <div className={`w-16 h-16 ${active.blob} blur-xl rounded-full absolute animate-pulse`}></div>
-            <div className="text-[10px] text-white/20 font-mono leading-none break-all p-1">010101 101010 001100 110011 GENESIS 8.0 010101</div>
-        </div>
-    )
+    // Use the same props as your original component
     return (
-        <div className="relative flex items-center justify-center perspective-[1200px]">
-            <motion.div className="relative" style={{ width: size, height: size, transformStyle: "preserve-3d" }}
-                animate={{ rotateX: [0, 360], rotateY: [0, 360], rotateZ: [0, 180] }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}>
-                <Face transform={`translateZ(${half}px)`} />
-                <Face transform={`rotateY(180deg) translateZ(${half}px)`} />
-                <Face transform={`rotateY(90deg) translateZ(${half}px)`} />
-                <Face transform={`rotateY(-90deg) translateZ(${half}px)`} />
-                <Face transform={`rotateX(90deg) translateZ(${half}px)`} />
-                <Face transform={`rotateX(-90deg) translateZ(${half}px)`} />
-            </motion.div>
+        <div className="flex items-center justify-center min-h-screen bg-black">
+            <MatrixModel
+                color="purple" 
+                size={300} 
+                // Crucial: Set the correct path to your GLB file
+                glbPath="/genesis_logo.glb" 
+            />
         </div>
-    )
+    );
+    // const half = size / 2
+    // const themes = {
+    //     green: { border: "border-green-500/80", shadow: "shadow-[0_0_30px_rgba(34,197,94,0.2)]", blob: "bg-green-500/20" },
+    //     purple: { border: "border-purple-500/80", shadow: "shadow-[0_0_30px_rgba(168,85,247,0.2)]", blob: "bg-purple-500/20" },
+    // }
+    // const active = themes[color] || themes.green
+    
+    // // CSS-only Face component
+    // const Face = ({ transform }) => (
+    //     <div className={`absolute inset-0 border-2 ${active.border} bg-black/90 flex flex-col items-center justify-center overflow-hidden ${active.shadow}`} style={{ transform }}>
+    //         <div className={`w-16 h-16 ${active.blob} blur-xl rounded-full absolute animate-pulse`}></div>
+    //         <div className="text-[10px] text-white/20 font-mono leading-none break-all p-1">010101 101010 001100 110011 GENESIS 8.0 010101</div>
+    //     </div>
+    // )
+    // return (
+    //     <div className="relative flex items-center justify-center perspective-[1200px]">
+    //         <motion.div className="relative" style={{ width: size, height: size, transformStyle: "preserve-3d" }}
+    //             animate={{ rotateX: [0, 360], rotateY: [0, 360], rotateZ: [0, 180] }}
+    //             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}>
+    //             <Face transform={`translateZ(${half}px)`} />
+    //             <Face transform={`rotateY(180deg) translateZ(${half}px)`} />
+    //             <Face transform={`rotateY(90deg) translateZ(${half}px)`} />
+    //             <Face transform={`rotateY(-90deg) translateZ(${half}px)`} />
+    //             <Face transform={`rotateX(90deg) translateZ(${half}px)`} />
+    //             <Face transform={`rotateX(-90deg) translateZ(${half}px)`} />
+    //         </motion.div>
+            
+    //     </div>
+    // )
 }
 
 const HoloGyro = () => (
