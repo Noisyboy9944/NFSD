@@ -198,8 +198,26 @@ const MatrixCube = ({ color = "green", size = 280 }) => {
 
 const HoloGyro = () => (
     <div className="relative flex items-center justify-center w-full max-w-[30rem] h-[30rem] opacity-40 pointer-events-none perspective-[1000px]">
-        <motion.div animate={{ rotateX: 360, rotateY: 180 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 rounded-full border border-cyan-500/30 border-dashed shadow-[0_0_25px_rgba(6,182,212,0.2)]" style={{ transformStyle: "preserve-3d" }} />
-        <motion.div animate={{ rotateY: 360, rotateZ: 180 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-8 rounded-full border border-purple-500/30 border-dotted shadow-[0_0_25px_rgba(168,85,247,0.2)]" style={{ transformStyle: "preserve-3d" }} />
+        
+        {/* Ring 1: Now spins only around Y-axis (Horizontal) */}
+        <motion.div 
+            // Change rotateX to 0, only rotateY remains
+            animate={{ rotateX: 0, rotateY: 180 }} 
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }} 
+            className="absolute inset-0 rounded-full border border-cyan-500/30 border-dashed shadow-[0_0_25px_rgba(6,182,212,0.2)]" 
+            style={{ transformStyle: "preserve-3d" }} 
+        />
+        
+        {/* Ring 2: Now spins only around Y-axis (Horizontal) */}
+        <motion.div 
+            // Remove rotateZ and ensure only rotateY is spinning
+            animate={{ rotateY: 360, rotateZ: 0 }} 
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }} 
+            className="absolute inset-8 rounded-full border border-purple-500/30 border-dotted shadow-[0_0_25px_rgba(168,85,247,0.2)]" 
+            style={{ transformStyle: "preserve-3d" }} 
+        />
+        
+        {/* Center blob remains unchanged */}
         <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }} transition={{ duration: 3, repeat: Infinity }} className="w-24 h-24 bg-gradient-to-br from-cyan-400/40 to-purple-500/40 rounded-full blur-xl" />
     </div>
 )

@@ -24,27 +24,11 @@ function RotatingModel({ glbPath }) {
     useFrame((state, delta) => {
         if (modelRef.current) {
             // Replicating a smooth, continuous rotation animation
-            modelRef.current.rotation.x += delta * 0.05; 
-            modelRef.current.rotation.y += delta * 0.1;
+            modelRef.current.rotation.y += delta * 0.15;
         }
     });
     
-    // Optional: Traverse the model to apply a material color/effect
-    // You can modify this to target specific meshes within your GLB if needed
-    // useMemo(() => {
-    //     scene.traverse((child) => {
-    //         if (child.isMesh) {
-    //             // Example: Applying a glowing mesh Standard Material
-    //             child.material = new THREE.MeshStandardMaterial({
-    //                 color: themeColor,
-    //                 emissive: "blue", // For the "glow" effect
-    //                 emissiveIntensity: 0.5,
-    //                 metalness: 0.8,
-    //                 roughness: 0.3,
-    //             });
-    //         }
-    //     });
-    // }, [scene, themeColor]);
+
 
 
     return (
